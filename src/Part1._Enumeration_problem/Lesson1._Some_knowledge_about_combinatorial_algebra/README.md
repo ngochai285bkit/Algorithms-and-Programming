@@ -27,7 +27,7 @@ Khi f là đơn ánh có nghĩa là với ∀i, j ∈ X ta có f(i) = f(j) ⇔ i
 | **i** | 1 | 2 | 3 |
 | **f(i)** | C | A | E |
 
-Số chỉnh hợp không lặp chập k của tập gồm n phần tử là: $ P_n^k = n(n-1)(n-2)...(n-k+1) = \frac{n!}{(n-k)!} $
+Số chỉnh hợp không lặp chập k của tập gồm n phần tử là: $P_n^k = n(n-1)(n-2)...(n-k+1) = \frac{n!}{(n-k)!}$
 
 ## 1.3. HOÁN VỊ
 
@@ -46,4 +46,4 @@ Số hoán vị của tập gồm n phần tử = số chỉnh hợp không lặ
 
 ## 1.4. TỔ HỢP
 
-Một tập con gồm k phần tử của S được gọi là một tổ hợp chập k của S. Lấy một tập con k phần tử của S, xét tất cả k! hoán vị của tập con này. Dễ thấy rằng các hoán vị đó là các chỉnh hợp không lặp chập k của S. Ví dụ lấy tập {A, B, C} là tập con của tập S trong ví dụ trên thì: 〈A, B, C〉, 〈C, A, B〉, 〈B, C, A〉, … là các chỉnh hợp không lặp chập 3 của S. Điều đó tức là khi liệt kê tất cả các chỉnh hợp không lặp chập k thì mỗi tổ hợp chập k sẽ được tính k! lần. Vậy số tổ hợp chập k của tập gồm n phần tử là: $ C_n^k = \frac{n!}{k!(n-k)!} $
+Một tập con gồm k phần tử của S được gọi là một tổ hợp chập k của S. Lấy một tập con k phần tử của S, xét tất cả k! hoán vị của tập con này. Dễ thấy rằng các hoán vị đó là các chỉnh hợp không lặp chập k của S. Ví dụ lấy tập {A, B, C} là tập con của tập S trong ví dụ trên thì: 〈A, B, C〉, 〈C, A, B〉, 〈B, C, A〉, … là các chỉnh hợp không lặp chập 3 của S. Điều đó tức là khi liệt kê tất cả các chỉnh hợp không lặp chập k thì mỗi tổ hợp chập k sẽ được tính k! lần. Vậy số tổ hợp chập k của tập gồm n phần tử là: $C_n^k = \frac{n!}{k!(n-k)!}$
