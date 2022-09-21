@@ -2,7 +2,7 @@
 
 ## PHẦN 1. BÀI TOÁN LIỆT KÊ
 
-### §1. NHẮC LẠI MỘT SỐ KIẾN THỨC ĐẠI SỐ TỔ HỢP
+### [§1. NHẮC LẠI MỘT SỐ KIẾN THỨC ĐẠI SỐ TỔ HỢP](/Part1._Enumeration_problem/Lesson1._Some_knowledge_about_combinatorial_algebra/README.md)
 
 > 1.1. CHỈNH HỢP LẶP
 >
@@ -12,7 +12,7 @@
 >
 > 1.4. TỔ HỢP
 
-### §2. PHƯƠNG PHÁP SINH (GENERATION)
+### [§2. PHƯƠNG PHÁP SINH (GENERATION)](/Part1._Enumeration_problem/Lesson2._Generation_method/README.md)
 
 > 2.1. SINH CÁC DÃY NHỊ PHÂN ĐỘ DÀI N
 >
