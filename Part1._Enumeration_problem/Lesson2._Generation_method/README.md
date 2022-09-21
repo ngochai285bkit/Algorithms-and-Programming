@@ -82,10 +82,9 @@ Ví dụ khi n = 8:
 
 Như vậy kỹ thuật sinh cấu hình kế tiếp từ cấu hình hiện tại có thể mô tả như sau:
 
-> Xét từ cuối dãy về đầu (xét từ hàng đơn vị lên), tìm số 0 gặp đầu tiên
->
-> - Nếu thấy thì thay số 0 đó bằng số 1 và đặt tất cả các phần tử phía sau vị trí đó bằng 0.
-> - Nếu không thấy thì thì toàn dãy là số 1, đây là cấu hình cuối cùng
+- Xét từ cuối dãy về đầu (xét từ hàng đơn vị lên), tìm số 0 gặp đầu tiên
+- Nếu thấy thì thay số 0 đó bằng số 1 và đặt tất cả các phần tử phía sau vị trí đó bằng 0.
+- Nếu không thấy thì thì toàn dãy là số 1, đây là cấu hình cuối cùng
 
 Dữ liệu vào (**Input**): nhập từ file văn bản BSTR.INP chứa số nguyên dương n ≤ 30
 
@@ -343,4 +342,92 @@ int main()
     }
     return 0;
 }
+```
+
+## 2.3. LIỆT KÊ CÁC HOÁN VỊ
+
+Ta sẽ lập chương trình liệt kê các hoán vị của {1, 2, …, n} theo thứ tự từ điển.
+
+Ví dụ với n = 4, ta phải liệt kê đủ 24 hoán vị:
+> 1.1234, 2.1243, 3.1324, 4.1342, 5.1423, 6.1432,
+>
+> 7.2134, 8.2143, 9.2314, 10.2341, 11.2413, 12.2431,
+>
+> 13.3124, 14.3142, 15.3214, 16.3241, 17.3412, 18.3421,
+>
+> 19.4123, 20.4132, 21.4213, 22.4231, 23.4312, 24.4321.
+
+Như vậy hoán vị đầu tiên sẽ là 〈1, 2, …, n〉. Hoán vị cuối cùng là 〈n, n-1, …, 1〉. Hoán vị sẽ sinh ra phải lớn hơn hoán vị hiện tại, hơn thế nữa phải là hoán vị vừa đủ lớn hơn hoán vị hiện tại theo nghĩa không thể có một hoán vị nào khác chen giữa chúng khi sắp thứ tự.
+
+Giả sử hoán vị hiện tại là x = 〈3, 2, 6, 5, 4, 1〉, xét 4 phần tử cuối cùng, ta thấy chúng được xếp giảm dần, điều đó có nghĩa là cho dù ta có hoán vị 4 phần tử này thế nào, ta cũng được một hoán vị bé hơn hoán vị hiện tại. Như vậy ta phải xét đến x[2] = 2, thay nó bằng một giá trị khác. Ta sẽ thay bằng giá trị nào?, không thể là 1 bởi nếu vậy sẽ được hoán vị nhỏ hơn, không thể là 3 vì đã có x[1] = 3 rồi (phần tử sau không được chọn vào những giá trị mà phần tử trước đã chọn). Còn lại các giá trị 4, 5, 6. Vì cần một hoán vị vừa đủ lớn hơn hiện tại nên ta chọn x[2] = 4. Còn các giá trị (x[3], x[4], x[5], x[6]) sẽ lấy trong tập {2, 6, 5, 1}. Cũng vì tính vừa đủ lớn nên ta sẽ tìm biểu diễn nhỏ nhất của 4 số này gán cho x[3], x[4], x[5], x[6] tức là 〈1, 2, 5, 6〉. Vậy hoán vị mới sẽ là 〈3, 4, 1, 2, 5, 6〉.
+
+Ta có nhận xét gì qua ví dụ này: Đoạn cuối của hoán vị hiện tại được xếp giảm dần, số x[5] = 4 là số nhỏ nhất trong đoạn cuối giảm dần thoả mãn điều kiện lớn hơn x[2] = 2. Nếu đổi chỗ x[5] cho x[2] thì ta sẽ được x[2] = 4 và đoạn cuối vẫn được sắp xếp giảm dần. Khi đó muốn biểu diễn nhỏ nhất cho các giá trị trong đoạn cuối thì ta chỉ cần đảo ngược đoạn cuối.
+
+Trong trường hợp hoán vị hiện tại là 〈2, 1, 3, 4〉 thì hoán vị kế tiếp sẽ là 〈2, 1, 4, 3〉. Ta cũng có thể coi hoán vị 〈2, 1, 3, 4〉 có đoạn cuối giảm dần, đoạn cuối này chỉ gồm 1 phần tử (4). Vậy kỹ thuật sinh hoán vị kế tiếp từ hoán vị hiện tại có thể xây dựng như sau:
+
+- Xác định đoạn cuối giảm dần dài nhất, tìm chỉ số i của phần tử x[i] đứng liền trước đoạn cuối đó. Điều này đồng nghĩa với việc tìm từ vị trí sát cuối dãy lên đầu, gặp chỉ số i đầu tiên thỏa mãn x[i] < x[i+1].
+- Nếu tìm thấy chỉ số i như trên:
+  - Trong đoạn cuối giảm dần, tìm phần tử x[k] nhỏ nhất thoả mãn điều kiện x[k] > x[i]. Do đoạn cuối giảm dần, điều này thực hiện bằng cách tìm từ cuối dãy lên đầu gặp chỉ số k đầu tiên thoả mãn x[k] > x[i] (có thể dùng tìm kiếm nhị phân).
+  - Đảo giá trị x[k] và x[i]
+  - Lật ngược thứ tự đoạn cuối giảm dần (từ x[i+1] đến x[k]) trở thành tăng dần.
+- Nếu không tìm thấy tức là toàn dãy đã sắp giảm dần, đây là cấu hình cuối cùng
+
+**Input:** file văn bản PERMUTE.INP chứa số nguyên dương n ≤ 12
+**Output:** file văn bản PERMUTE.OUT các hoán vị của dãy (1, 2, …, n)
+
+| PERMUTE.INP | PERMUTE.OUT |
+|:-----------:|:-----------:|
+|      3      |    1 2 3    |
+|             |    1 3 2    |
+|             |    2 1 3    |
+|             |    2 3 1    |
+|             |    3 1 2    |
+|             |    3 2 1    |
+
+***Code Pascal***
+
+```pascal
+program Permutation;
+const
+    InputFile = 'PERMUTE.INP';
+    OutputFile = 'PERMUTE.OUT';
+    max = 12;
+var
+    n, i, k, a, b: Integer;
+    x: array[1..max] of Integer;
+    f: Text;
+procedure Swap(var X, Y: Integer); {Thủ tục đảo giá trị hai tham biến X, Y}
+var
+    Temp: Integer;
+begin
+    Temp := X; X := Y; Y := Temp;
+end;
+
+begin
+    Assign(f, InputFile); Reset(f);
+    ReadLn(f, n);
+    Close(f);
+    Assign(f, OutputFile); Rewrite(f);
+    for i := 1 to n do x[i] := i; {Khởi tạo cấu hình đầu: x[1] := 1; x[2] := 2; …, x[n] := n}
+    repeat
+        for i := 1 to n do Write(f, x[i], ' '); {In ra cấu hình hoán vị hiện tại}
+        WriteLn(f);
+        i := n - 1;
+        while (i > 0) and (x[i] > x[i + 1]) do Dec(i);
+        if i > 0 then {Chưa gặp phải hoán vị cuối (n, n-1, …, 1)}
+            begin
+                k := n; {x[k] là phần tử cuối dãy}
+                while x[k] < x[i] do Dec(k); {Lùi dần k để tìm gặp x[k] đầu tiên lớn hơn x[i]}
+                Swap(x[k], x[i]); {Đổi chỗ x[k] và x[i]}
+                a := i + 1; b := n; {Lật ngược đoạn cuối giảm dần, a: đầu đoạn, b: cuối đoạn}
+                while a < b do
+                    begin
+                        Swap(x[a], x[b]); {Đảo giá trị x[a] và x[b]}
+                        Inc(a); {Tiến a và lùi b, tiếp tục cho tới khi a, b chạm nhau}
+                        Dec(b);
+                    end;
+            end;
+    until i = 0; {Toàn dãy là dãy giảm dần - không sinh tiếp được - hết cấu hình}
+    Close(f);
+end.
 ```
