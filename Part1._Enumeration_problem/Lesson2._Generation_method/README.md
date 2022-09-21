@@ -102,7 +102,7 @@ Kết quả ra (**Output**): ghi ra file văn bản BSTR.OUT các dãy nhị ph�
 |   | 110 |
 |   | 111 |
 
-***Code Passcal***
+***Code Pascal***
 
 ```pascal
 program Binary_Strings;
