@@ -192,3 +192,96 @@ int main()
     return 0;
 }
 ```
+
+## 2.2. LIỆT KÊ CÁC TẬP CON K PHẦN TỬ
+
+Ta sẽ lập chương trình liệt kê các tập con k phần tử của tập {1, 2, …, n} theo thứ tự từ điền.
+
+Ví dụ: với n = 5, k = 3, ta phải liệt kê đủ 10 tập con:
+
+> 1.{1, 2, 3} , 2.{1, 2, 4} , 3.{1, 2, 5} , 4.{1, 3, 4} , 5.{1, 3, 5}
+>
+> 6.{1, 4, 5} , 7.{2, 3, 4} , 8.{2, 3, 5} , 9.{2, 4, 5} , 10.{3, 4, 5}
+
+Như vậy tập con đầu tiên (cấu hình khởi tạo) là {1, 2, …, k}. Cấu hình kết thúc là {n - k + 1, n - k + 2, …, n}.
+
+Nhận xét: Ta sẽ in ra tập con bằng cách in ra lần lượt các phần tử của nó theo thứ tự tăng dần. Biểu diễn mỗi tập con là một dãy x[1..k] trong đó x[1] < x[2] < … < x[k]. Ta nhận thấy giới hạn trên (giá trị lớn nhất có thể nhận) của x[k] là n, của x[k-1] là n - 1, của x[k-2] là n - 2…
+
+Tổng quát: giới hạn trên của x[i] = n - k + i;
+
+Còn tất nhiên, giới hạn dưới của x[i] (giá trị nhỏ nhất x[i] có thể nhận) là x[i-1] + 1.
+
+Như vậy nếu ta đang có một dãy x đại diện cho một tập con, nếu x là cấu hình kết thúc có nghĩa là tất cả các phần tử trong x đều đã đạt tới giới hạn trên thì quá trình sinh kết thúc, nếu không thì ta phải sinh ra một dãy x mới tăng dần thoả mãn vừa đủ lớn hơn dãy cũ theo nghĩa không có một tập con k phần tử nào chen giữa chúng khi sắp thứ tự từ điển.
+
+Ví dụ: n = 9, k = 6. Cấu hình đang có x = 〈1, 2, 6, 7, 8, 9〉. Các phần tử x[3] đến x[6] đã đạt tới giới hạn trên nên để sinh cấu hình mới ta không thể sinh bằng cách tăng một phần tử trong số các x[6], x[5], x[4], x[3] lên được, ta phải tăng x[2] = 2 lên thành x[2] = 3. Được cấu hình mới là x = 〈1, 3, 6, 7, 8, 9〉. Cấu hình này đã thoả mãn lớn hơn cấu hình trước nhưng chưa thoả mãn tính chất vừa đủ lớn, muốn vậy ta lại thay x[3], x[4], x[5], x[6] bằng các giới hạn dưới của nó. Tức là:
+
+> x[3] := x[2] + 1 = 4
+>
+> x[4] := x[3] + 1 = 5
+>
+> x[5] := x[4] + 1 = 6
+>
+> x[6] := x[5] + 1 = 7
+
+Ta được cấu hình mới x = 〈1, 3, 4, 5, 6, 7〉 là cấu hình kế tiếp. Nếu muốn tìm tiếp, ta lại nhận thấy rằng x[6] = 7 chưa đạt giới hạn trên, như vậy chỉ cần tăng x[6] lên 1 là được x = 〈1, 3, 4, 5, 6, 8〉.
+
+Vậy kỹ thuật sinh tập con kế tiếp từ tập đã có x có thể xây dựng như sau:
+
+- Tìm từ cuối dãy lên đầu cho tới khi gặp một phần tử x[i] chưa đạt giới hạn trên n - k + i.
+- Nếu tìm thấy:
+  - Tăng x[i] đó lên 1.
+  - Đặt tất cả các phần tử phía sau x[i] bằng giới hạn dưới.
+
+- Nếu không tìm thấy tức là mọi phần tử đã đạt giới hạn trên, đây là cấu hình cuối cùng
+
+**Input:** file văn bản SUBSET.INP chứa hai số nguyên dương n, k (1 ≤ k ≤ n ≤ 30) cách nhau ít nhất một dấu cách
+**Output:** file văn bản SUBSET.OUT các tập con k phần tử của tập {1, 2, …, n}
+
+| SUBSET.INP | SUBSET.OUT |
+|:----------:|:----------:|
+|    5 3     |  {1, 2, 3} |
+|            |  {1, 2, 4} |
+|            |  {1, 2, 5} |
+|            |  {1, 3, 4} |
+|            |  {1, 3, 5} |
+|            |  {1, 4, 5} |
+|            |  {2, 3, 4} |
+|            |  {2, 3, 5} |
+|            |  {2, 4, 5} |
+|            |  {3, 4, 5} |
+
+***Code Pascal***
+
+```pascal
+program Combination;
+const
+    InputFile = 'SUBSET.INP';
+    OutputFile = 'SUBSET.OUT';
+    max = 30;
+var
+    x: array[1..max] of Integer;
+    n, k, i, j: Integer;
+    f: Text;
+begin
+    Assign(f, InputFile); Reset(f);
+    ReadLn(f, n, k);
+    Close(f);
+    Assign(f, OutputFile); Rewrite(f);
+    for i := 1 to k do x[i] := i; {x := 12…k (Cấu hình khởi tạo)}
+    repeat
+        {In ra cấu hình hiện tại}
+        Write(f, '{');
+        for i := 1 to k - 1 do Write(f, x[i], ', ');
+        WriteLn(f, x[k], '}');
+        {Sinh tiếp}
+        i := k; {Xét từ cuối dãy lên tìm x[i] chưa đạt giới hạn trên n - k + i}
+        while (i > 0) and (x[i] = n - k + i) do Dec(i);
+        if i > 0 then {Nếu chưa lùi đến 0 có nghĩa là chưa phải cấu hình kết thúc}
+            begin
+                Inc(x[i]); {Tăng x[i] lên 1, Đặt các phần tử đứng sau x[i] bằng giới hạn dưới của nó}
+                for j := i + 1 to k do x[j] := x[j - 1] + 1;
+            end;
+    until i = 0; {Lùi đến tận 0 có nghĩa là tất cả các phần tử đã đạt giới hạn trên - hết cấu hình}
+    Close(f);
+end.
+```
