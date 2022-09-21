@@ -54,3 +54,5 @@ Có thể nói rằng, phương pháp liệt kê là phương kế cuối cùng 
 > 4.5. DÃY ABC
 
 ---
+
+[Previous](/README.md) | [Next](/Part1._Enumeration_problem/Lesson1._Some_knowledge_about_combinatorial_algebra/README.md)

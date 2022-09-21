@@ -349,3 +349,5 @@
 > 13.5. ĐỘ PHỨC TẠP TÍNH TOÁN
 
 ---
+
+[Next](/Part1._Enumeration_problem/README.md)
