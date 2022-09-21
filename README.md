@@ -1,6 +1,6 @@
 # Giải thuật và Lập trình
 
-## PHẦN 1. BÀI TOÁN LIỆT KÊ
+## [PHẦN 1. BÀI TOÁN LIỆT KÊ](/Part1._Enumeration_problem/README.md)
 
 ### [§1. NHẮC LẠI MỘT SỐ KIẾN THỨC ĐẠI SỐ TỔ HỢP](/Part1._Enumeration_problem/Lesson1._Some_knowledge_about_combinatorial_algebra/README.md)
 
