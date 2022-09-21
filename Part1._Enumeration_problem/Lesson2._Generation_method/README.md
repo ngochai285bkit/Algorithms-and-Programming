@@ -373,6 +373,7 @@ Trong trường hợp hoán vị hiện tại là 〈2, 1, 3, 4〉 thì hoán v�
 - Nếu không tìm thấy tức là toàn dãy đã sắp giảm dần, đây là cấu hình cuối cùng
 
 **Input:** file văn bản PERMUTE.INP chứa số nguyên dương n ≤ 12
+
 **Output:** file văn bản PERMUTE.OUT các hoán vị của dãy (1, 2, …, n)
 
 | PERMUTE.INP | PERMUTE.OUT |
