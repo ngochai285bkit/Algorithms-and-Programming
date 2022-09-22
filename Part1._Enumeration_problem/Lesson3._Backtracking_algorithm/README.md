@@ -288,3 +288,138 @@ int main()
 ```
 
 Nếu để ý chương trình trên và chương trình liệt kê dãy nhị phân độ dài n, ta thấy về cơ bản chúng chỉ khác nhau ở thủ tục Try(i) - chọn thử các giá trị cho x[i], ở chương trình liệt kê dãy nhị phân ta thử chọn các giá trị 0 hoặc 1 còn ở chương trình liệt kê các tập con k phần tử ta thử chọn x[i] là một trong các giá trị nguyên từ x[i-1] + 1 đến n - k + i. Qua đó ta có thể thấy tính phổ dụng của thuật toán quay lui: mô hình cài đặt có thể thích hợp cho nhiều bài toán, khác với phương pháp sinh tuần tự, với mỗi bài toán lại phải có một thuật toán sinh kế tiếp riêng làm cho việc cài đặt mỗi bài một khác, bên cạnh đó, không phải thuật toán sinh kế tiếp nào cũng dễ cài đặt.
+
+## 3.3. LIỆT KÊ CÁC CHỈNH HỢP KHÔNG LẶP CHẬP K
+
+Để liệt kê các chỉnh hợp không lặp chập k của tập S = {1, 2, …, n} ta có thể đưa về liệt kê các cấu hình x[1..k] ở đây các x[i] ∈ S và khác nhau đôi một. Như vậy thủ tục Try(i) - xét tất cả các khả năng chọn x[i] - sẽ thử hết các giá trị từ 1 đến n, mà các giá trị này chưa bị các phần tử đứng trước chọn. Muốn xem các giá trị nào chưa được chọn ta sử dụng kỹ thuật dùng mảng đánh dấu:
+
+- Khởi tạo một mảng c[1..n] mang kiểu logic boolean. Ở đây c[i] cho biết giá trị i có còn tự do hay đã bị chọn rồi. Ban đầu khởi tạo tất cả các phần tử mảng c là TRUE có nghĩa là các phần tử từ 1 đến n đều tự do.
+- Tại bước chọn các giá trị có thể của x[i] ta chỉ xét những giá trị j có c[j] = TRUE có nghĩa là chỉ chọn những giá trị tự do.
+- Trước khi gọi đệ quy tìm x[i+1]: ta đặt giá trị j vừa gán cho x[i] là đã bị chọn có nghĩa là đặt c[j] := FALSE để các thủ tục Try(i + 1), Try(i + 2)… gọi sau này không chọn phải giá trị j đó nữa
+- Sau khi gọi đệ quy tìm x[i+1]: có nghĩa là sắp tới ta sẽ thử gán một giá trị khác cho x[i] thì ta sẽ đặt giá trị j vừa thử đó thành tự do (c[j] := TRUE), bởi khi xi đã nhận một giá trị khác rồi thì các phần tử đứng sau: x[i+1], x[i+2] … hoàn toàn có thể nhận lại giá trị j đó. Điều này hoàn toàn hợp lý trong phép xây dựng chỉnh hợp không lặp: x[1] có n cách chọn, x[2] có n - 1 cách chọn, …Lưu ý rằng khi thủ tục Try(i) có i = k thì ta không cần phải đánh dấu gì cả vì tiếp theo chỉ có in kết quả chứ không cần phải chọn thêm phần tử nào nữa.
+
+***Input:*** file văn bản ARRANGE.INP chứa hai số nguyên dương n, k (1 ≤ k ≤ n ≤ 20) cách nhau ít nhất một dấu cách
+
+***Output:*** file văn bản ARRANGE.OUT ghi các chỉnh hợp không lặp chập k của tập {1, 2, …, n}
+
+| ARRANGE.INP | ARRANGE.OUT |
+|:-----------:|:-----------:|
+|     3 2     |     1 2     |
+|             |     1 3     |
+|             |     2 1     |
+|             |     2 3     |
+|             |     3 1     |
+|             |     3 2     |
+
+***Code Pascal***
+
+```pascal
+program Arrangement;
+const
+    InputFile = 'ARRANGES.INP';
+    OutputFile = 'ARRANGES.OUT';
+    max = 20;
+var
+    x: array[1..max] of Integer;
+    c: array[1..max] of Boolean;
+    n, k: Integer;
+    f: Text;
+
+procedure PrintResult; {Thủ tục in cấu hình tìm được}
+var
+    i: Integer;
+begin
+    for i := 1 to k do Write(f, x[i], ' ');
+    WriteLn(f);
+end;
+
+procedure Try(i: Integer); {Thử các cách chọn x[i]}
+var
+    j: Integer;
+begin
+    for j := 1 to n do
+    if c[j] then {Chỉ xét những giá trị j còn tự do}
+        begin
+            x[i] := j;
+            if i = k then PrintResult {Nếu đã chọn được đến xk thì chỉ việc in kết quả}
+            else
+                begin
+                    c[j] := False; {Đánh dấu: j đã bị chọn}
+                    Try(i + 1); {Thủ tục này chỉ xét những giá trị còn tự do gán cho x[i+1]}
+                    c[j] := True; {Bỏ đánh dấu: j lại là tự do, bởi sắp tới sẽ thử một cách chọn khác của x[i]}
+                end;
+        end;
+end;
+
+begin
+    Assign(f, InputFile); Reset(f);
+    ReadLn(f, n, k);
+    Assign(f, OutputFile); Rewrite(f);
+    FillChar(c, SizeOf(c), True); {Tất cả các số đều chưa bị chọn}
+    Try(1); {Thử các cách chọn giá trị của x[1]}
+    Close(f);
+end.
+```
+
+***Code C***
+
+```c
+#include <stdio.h>
+#include <stdbool.h>
+
+int n = 0, k = 0;
+int x[21];
+bool c[21];
+FILE *fi = NULL, *fo = NULL;
+
+void printResult() // Xuất cấu hình hiện tại
+{
+    for (int i = 1; i <= k; i++)
+    {
+        fprintf(fo, "%d ", x[i]);
+    }
+    fprintf(fo, "\n");
+}
+
+void Try(int i) // Thử các cách chọn cho x[i]
+{
+    for (int j = 1; j <= n; j++)
+    {
+        if (c[j]) // Chỉ xét những giá trị j còn tự do
+        {
+            x[i] = j;
+            if (i == k) // Nếu chọn đến được x[k] thì chỉ cần in kết quả
+            {
+                printResult();
+            }
+            else
+            {
+                c[j] = false; // Đánh dấu j đã được chọn
+                Try(i + 1);   // Xét những giá trị j còn tự do để gán cho x[i+1]
+                c[j] = true;  // Bỏ đánh dấu: j lại là tự do, bởi sắp tới sẽ thử một cách chọn khác của x[i]
+            }
+        }
+    }
+}
+
+int main()
+{
+    fi = fopen("ARRANGES.INP", "r");
+    if (fi != NULL)
+    {
+        fscanf(fi, "%d %d", &n, &k);
+        fclose(fi);
+        if (k > 0 && k <= n && n <= 20)
+        {
+            fo = fopen("ARRANGES.OUT", "w");
+            for (int i = 1; i <= n; i++)
+            {
+                c[i] = true; // Đánh dấu tất cả các số đều chưa được chọn
+            }
+            Try(1); // Thử các cách chọn cho x[1]
+            fclose(fo);
+        }
+    }
+    return 0;
+}
+```
