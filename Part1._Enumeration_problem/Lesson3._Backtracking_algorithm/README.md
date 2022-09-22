@@ -423,3 +423,5 @@ int main()
     return 0;
 }
 ```
+
+***Nhận xét:*** khi k = n thì đây là chương trình liệt kê hoán vị
