@@ -234,6 +234,7 @@ Vậy kỹ thuật sinh tập con kế tiếp từ tập đã có x có thể x�
 - Nếu không tìm thấy tức là mọi phần tử đã đạt giới hạn trên, đây là cấu hình cuối cùng
 
 **Input:** file văn bản SUBSET.INP chứa hai số nguyên dương n, k (1 ≤ k ≤ n ≤ 30) cách nhau ít nhất một dấu cách
+
 **Output:** file văn bản SUBSET.OUT các tập con k phần tử của tập {1, 2, …, n}
 
 | SUBSET.INP | SUBSET.OUT |

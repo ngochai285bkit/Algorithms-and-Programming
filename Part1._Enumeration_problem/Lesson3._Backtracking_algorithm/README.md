@@ -151,3 +151,140 @@ int main()
 ![Cây tìm kiếm quay lui](/Part1._Enumeration_problem/Lesson3._Backtracking_algorithm/H1.png)
 
 ---
+
+## 3.2. LIỆT KÊ CÁC TẬP CON K PHẦN TỬ
+
+**Input:** file văn bản SUBSET.INP chứa hai số nguyên dương n, k (1 ≤ k ≤ n ≤ 30) cách nhau ít nhất một dấu cách
+
+**Output:** file văn bản SUBSET.OUT các tập con k phần tử của tập {1, 2, …, n}
+
+| SUBSET.INP | SUBSET.OUT |
+|:----------:|:----------:|
+|    5 3     |  {1, 2, 3} |
+|            |  {1, 2, 4} |
+|            |  {1, 2, 5} |
+|            |  {1, 3, 4} |
+|            |  {1, 3, 5} |
+|            |  {1, 4, 5} |
+|            |  {2, 3, 4} |
+|            |  {2, 3, 5} |
+|            |  {2, 4, 5} |
+|            |  {3, 4, 5} |
+
+Để liệt kê các tập con k phần tử của tập S = {1, 2, …, n} ta có thể đưa về liệt kê các cấu hình x[1..n], ở đây các x[i] ∈ S và x[1] < x[2] < … < x[k]. Ta có nhận xét:
+
+> x[k] ≤ n
+>
+> x[k-1] ≤ x[k] - 1 ≤ n - 1
+>
+> …
+>
+> x[i] ≤ n - k + i
+>
+> …
+>
+> x[1] ≤ n - k + 1.
+
+Từ đó suy ra x[i-1] + 1 ≤ x[i] ≤ n - k + i (1 ≤ i ≤ k) ở đây ta giả thiết có thêm một số x[0] = 0 khi xét i = 1.
+Như vậy ta sẽ xét tất cả các cách chọn x[1] từ 1 (=x[0] + 1) đến n - k + 1, với mỗi giá trị đó, xét tiếp tất cả các cách chọn x[2] từ x[1] +1 đến n - k + 2, … cứ như vậy khi chọn được đến x[k] thì ta có một cấu hình cần liệt kê. Chương trình liệt kê bằng thuật toán quay lui như sau:
+
+***Code Pascal***
+
+```pascal
+program Combination;
+const
+    InputFile = 'SUBSET.INP';
+    OutputFile = 'SUBSET.OUT';
+    max = 30;
+var
+    x: array[0..max] of Integer;
+    n, k: Integer;
+    f: Text;
+
+procedure PrintResult; (*In ra tập con {x[1], x[2], …, x[k]}*)
+var
+    i: Integer;
+begin
+    Write(f, '{');
+    for i := 1 to k - 1 do Write(f, x[i], ', ');
+    WriteLn(f, x[k], '}');
+end;
+
+procedure Try(i: Integer); {Thử các cách chọn giá trị cho x[i]}
+var
+    j: Integer;
+begin
+    for j := x[i - 1] + 1 to n - k + i do
+        begin
+            x[i] := j;
+            if i = k then PrintResult
+            else Try(i + 1);
+        end;
+end;
+
+begin
+    Assign(f, InputFile); Reset(F);
+    ReadLn(f, n, k);
+    Close(f);
+    Assign(f, OutputFile); Rewrite(f);
+    x[0] := 0;
+    Try(1);
+    Close(f);
+end.
+```
+
+***Code C***
+
+```c
+#include <stdio.h>
+
+int n = 0, k = 0;
+int x[31];
+FILE *fi = NULL, *fo = NULL;
+
+void printResult()
+{
+    fprintf(fo, "{");
+    for (int i = 1; i < k; i++)
+    {
+        fprintf(fo, "%d, ", x[i]);
+    }
+    fprintf(fo, "%d}\n", x[k]);
+}
+
+void Try(int i)
+{
+    for (int j = x[i - 1] + 1; j <= n - k + i; j++)
+    {
+        x[i] = j;
+        if (i == k)
+        {
+            printResult();
+        }
+        else
+        {
+            Try(i + 1);
+        }
+    }
+}
+
+int main()
+{
+    fi = fopen("SUBSET.INP", "r");
+    if (fi != NULL)
+    {
+        fscanf(fi, "%d %d", &n, &k);
+        fclose(fi);
+        if (k > 0 && k <= n && n <= 30)
+        {
+            fo = fopen("SUBSET.OUT", "w");
+            x[0] = 0;
+            Try(1);
+            fclose(fo);
+        }
+    }
+    return 0;
+}
+```
+
+Nếu để ý chương trình trên và chương trình liệt kê dãy nhị phân độ dài n, ta thấy về cơ bản chúng chỉ khác nhau ở thủ tục Try(i) - chọn thử các giá trị cho x[i], ở chương trình liệt kê dãy nhị phân ta thử chọn các giá trị 0 hoặc 1 còn ở chương trình liệt kê các tập con k phần tử ta thử chọn x[i] là một trong các giá trị nguyên từ x[i-1] + 1 đến n - k + i. Qua đó ta có thể thấy tính phổ dụng của thuật toán quay lui: mô hình cài đặt có thể thích hợp cho nhiều bài toán, khác với phương pháp sinh tuần tự, với mỗi bài toán lại phải có một thuật toán sinh kế tiếp riêng làm cho việc cài đặt mỗi bài một khác, bên cạnh đó, không phải thuật toán sinh kế tiếp nào cũng dễ cài đặt.
