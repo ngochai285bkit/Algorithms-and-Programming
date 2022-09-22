@@ -20,7 +20,7 @@
 >
 > 2.3. LIỆT KÊ CÁC HOÁN VỊ
 
-### §3. THUẬT TOÁN QUAY LUI
+### [§3. THUẬT TOÁN QUAY LUI](/Part1._Enumeration_problem/Lesson3._Backtracking_algorithm/README.md)
 
 > 3.1. LIỆT KÊ CÁC DÃY NHỊ PHÂN ĐỘ DÀI N
 >
