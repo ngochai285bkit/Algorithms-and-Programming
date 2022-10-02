@@ -425,3 +425,107 @@ int main()
 ```
 
 ***Nhận xét:*** khi k = n thì đây là chương trình liệt kê hoán vị
+
+## 3.4. BÀI TOÁN PHÂN TÍCH SỐ
+
+### 3.4.1. Bài toán
+
+Cho một số nguyên dương n ≤ 30, hãy tìm tất cả các cách phân tích số n thành tổng của các số nguyên dương, các cách phân tích là hoán vị của nhau chỉ tính là 1 cách.
+
+### 3.4.2. Cách làm
+
+Ta sẽ lưu nghiệm trong mảng x, ngoài ra có một mảng t. Mảng t xây dựng như sau: t[i] sẽ là tổng các phần tử trong mảng x từ x[1] đến x[i] : t[i] := x[1] + x[2] + … + x[i].
+
+Khi liệt kê các dãy x có tổng các phần tử đúng bằng n, để tránh sự trùng lặp ta đưa thêm ràng buộc x[i]-1 ≤ x[i].
+
+Vì số phần tử thực sự của mảng x là không cố định nên thủ tục PrintResult dùng để in ra 1 cách phân tích phải có thêm tham số cho biết sẽ in ra bao nhiêu phần tử.
+
+Thủ tục đệ quy Try(i) sẽ thử các giá trị có thể nhận của x[i] (x[i] ≥ x[i-1])
+
+Khi nào thì in kết quả và khi nào thì gọi đệ quy tìm tiếp?
+
+Lưu ý rằng t[i-1] là tổng của tất cả các phần tử từ x[1] đến x[i-1] do đó Khi t[i] = n tức là (x[i] = n - t[i-1]) thì in kết quả. Khi tìm tiếp, x[i+1] sẽ phải lớn hơn hoặc bằng x[i]. Mặt khác t[i+1] là tổng của các số từ x[1] tới x[i+1] không được vượt quá n. 
+
+Vậy ta có t[i+1] ≤ n ⇔ t[i-1] + x[i] + x[i+1] ≤ n ⇔ x[i] + x[i+1] ≤ n - t[i-1] tức là x[i] ≤ (n - t[i-1])/2.
+
+Ví dụ đơn giản khi n = 10 thì chọn x[1] = 6, 7, 8, 9 là việc làm vô nghĩa vì như vậy cũng không ra nghiệm mà cũng không chọn tiếp x[2] được nữa.
+
+Một cách dễ hiểu ta gọi đệ quy tìm tiếp khi giá trị x[i] được chọn còn cho phép chọn thêm một phần tử khác lớn hơn hoặc bằng nó mà không làm tổng vượt quá n. Còn ta in kết quả chỉ khi x[i] mang giá trị đúng bằng số thiếu hụt của tổng i-1 phần tử đầu so với n.
+
+Vậy thủ tục Try(i) thử các giá trị cho x[i] có thể mô tả như sau: (để tổng quát cho i = 1, ta đặt x[0] = 1, và t[0] = 0).
+
+Xét các giá trị của x[i] từ x[i-1] đến (n - t[i-1] ) div 2, cập nhật t[i] := t[i-1] + x[i] và gọi đệ quy tìm tiếp. Cuối cùng xét giá trị x[i] = n - t[i-1] và in kết quả từ x[1] đến x[i].
+
+***Input:*** file văn bản ANALYSE.INP chứa số nguyên dương n ≤ 30
+
+***Output:*** file văn bản ANALYSE.OUT ghi các cách phân tích số n.
+
+| ANALYSE.INP | ANALYSE.OUT |
+|:-----------:|:------------|
+|      6      | 6 = 1+1+1+1+1+1 |
+|             | 6 = 1+1+1+1+2 |
+|             | 6 = 1+1+1+3 |
+|             | 6 = 1+1+2+2 |
+|             | 6 = 1+1+4 |
+|             | 6 = 1+2+3 |
+|             | 6 = 1+5 |
+|             | 6 = 2+2+2 |
+|             | 6 = 2+4 |
+|             | 6 = 3+3 |
+|             | 6 = 6 |
+
+***Code Pascal***
+
+```pascal
+program Analyses;
+
+const
+    InputFile = 'ANALYSE.INP';
+    OutputFile = 'ANALYSE.OUT';
+    max = 30;
+
+var
+    n: Integer;
+    x: array[0..max] of Integer;
+    t: array[0..max] of Integer;
+    f: Text;
+
+procedure Init; {Khởi tạo}
+begin
+    Assign(f, InputFile); Reset(f);
+    ReadLn(f, n);
+    Close(f);
+    x[0] := 1;
+    t[0] := 0;
+end;
+
+procedure PrintResult(k: Integer);
+var
+    i: Integer;
+begin
+    Write(f, n, ' = ');
+    for i := 1 to k - 1 do Write(f, x[i], '+');
+    WriteLn(f, x[k]);
+end;
+
+procedure Try(i: Integer);
+var
+    j: Integer;
+begin
+    for j := x[i - 1] to (n - T[i - 1]) div 2 do {Trường hợp còn chọn tiếp x i+1 }
+        begin
+            x[i] := j;
+            t[i] := t[i - 1] + j;
+            Try(i + 1);
+        end;
+    x[i] := n - T[i - 1]; {Nếu x i là phần tử cuối thì nó bắt buộc phải là … và in kết quả}
+    PrintResult(i);
+end;
+
+begin
+    Init;
+    Assign(f, OutputFile); Rewrite(f);
+    Try(1);
+    Close(f);
+end.
+```
