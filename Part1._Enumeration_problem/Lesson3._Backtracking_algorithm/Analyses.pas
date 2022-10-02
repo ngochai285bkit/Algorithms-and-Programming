@@ -33,13 +33,13 @@ procedure Try(i: Integer);
 var
     j: Integer;
 begin
-    for j := x[i - 1] to (n - T[i - 1]) div 2 do {Trường hợp còn chọn tiếp x i+1 }
+    for j := x[i - 1] to (n - T[i - 1]) div 2 do {Trường hợp còn chọn tiếp x[i+1]}
         begin
             x[i] := j;
             t[i] := t[i - 1] + j;
             Try(i + 1);
         end;
-    x[i] := n - T[i - 1]; {Nếu x i là phần tử cuối thì nó bắt buộc phải là … và in kết quả}
+    x[i] := n - T[i - 1]; {Nếu x[i] là phần tử cuối thì nó bắt buộc phải là … và in kết quả}
     PrintResult(i);
 end;
 
