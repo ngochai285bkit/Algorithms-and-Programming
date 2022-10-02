@@ -444,7 +444,7 @@ Thủ tục đệ quy Try(i) sẽ thử các giá trị có thể nhận của x
 
 Khi nào thì in kết quả và khi nào thì gọi đệ quy tìm tiếp?
 
-Lưu ý rằng t[i-1] là tổng của tất cả các phần tử từ x[1] đến x[i-1] do đó Khi t[i] = n tức là (x[i] = n - t[i-1]) thì in kết quả. Khi tìm tiếp, x[i+1] sẽ phải lớn hơn hoặc bằng x[i]. Mặt khác t[i+1] là tổng của các số từ x[1] tới x[i+1] không được vượt quá n. 
+Lưu ý rằng t[i-1] là tổng của tất cả các phần tử từ x[1] đến x[i-1] do đó Khi t[i] = n tức là (x[i] = n - t[i-1]) thì in kết quả. Khi tìm tiếp, x[i+1] sẽ phải lớn hơn hoặc bằng x[i]. Mặt khác t[i+1] là tổng của các số từ x[1] tới x[i+1] không được vượt quá n.
 
 Vậy ta có t[i+1] ≤ n ⇔ t[i-1] + x[i] + x[i+1] ≤ n ⇔ x[i] + x[i+1] ≤ n - t[i-1] tức là x[i] ≤ (n - t[i-1])/2.
 
